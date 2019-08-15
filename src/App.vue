@@ -1,9 +1,20 @@
 <template>
   <div id="app">
     <router-view />
+    <close />
   </div>
 </template>
+<script>
+import Close from "@/components/Close.vue";
 
+export default {
+  name: "app",
+  components: {
+    Close
+  },
+  methods: {}
+};
+</script>
 <style lang="scss">
 * {
   box-sizing: border-box;
@@ -15,8 +26,7 @@ body {
   font: 16px/2 microsoft yahei;
 }
 ::-webkit-scrollbar {
-  /*滚动条整体样式*/
-  width: 8px; /*高宽分别对应横竖滚动条的尺寸*/
+  width: 8px;
   height: 1px;
 }
 
@@ -34,5 +44,16 @@ body {
   border-radius: 10px;
   background: #ededed;
   position: absolute;
+}
+
+.min_max_close {
+  top: 0;
+  position: absolute;
+  right: 0;
+  font-size: 22px;
+  color: white;
+  i {
+    margin-right: 5px;
+  }
 }
 </style>

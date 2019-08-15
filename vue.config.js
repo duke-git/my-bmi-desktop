@@ -2,6 +2,7 @@ module.exports = {
     lintOnSave: false,
     configureWebpack: {
         // Configuration applied to all builds
+        devtool: 'source-map'
     },
     pluginOptions: {
         electronBuilder: {

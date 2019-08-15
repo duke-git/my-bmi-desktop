@@ -1,6 +1,6 @@
 'use strict'
 const path = require('path');
-import { app, protocol, BrowserWindow, Menu, Tray } from 'electron'
+import { app, protocol, BrowserWindow, Menu, Tray, ipcMain } from 'electron'
 import {
   createProtocol,
   installVueDevtools
@@ -30,6 +30,7 @@ function createWindow() {
     height: 563,
     useContentSize: true,
     width: 1000,
+    frame: false,
     webPreferences: {
       nodeIntegration: true
     }
@@ -60,6 +61,23 @@ function createWindow() {
 // appTray.on('click', function () {
 //   win.show();
 // });
+
+//接收最小化命令
+ipcMain.on('window-min', function () {
+  win.minimize();
+})
+//接收最大化命令
+ipcMain.on('window-max', function () {
+  if (win.isMaximized()) {
+    win.restore();
+  } else {
+    win.maximize();
+  }
+})
+//接收关闭命令
+ipcMain.on('window-close', function () {
+  win.close();
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
