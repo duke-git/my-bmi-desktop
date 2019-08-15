@@ -1,8 +1,11 @@
 {
   "name": "my-bmi-desktop",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "author": "dudaodong@kingsoft.com",
+  "description": "An electron-vue project",
+  "license": "MIT",
   "scripts": {
+    "dev": "vue-cli-service electron:serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
