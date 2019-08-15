@@ -1,4 +1,6 @@
 # my-bmi-desktop
+计算身体指数(bmi)桌面应用，基于Vue CLI Plugin Electron Builder。
+https://nklayman.github.io/vue-cli-plugin-electron-builder/
 
 ## Project setup
 ```
@@ -24,6 +26,3 @@ npm run test
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
