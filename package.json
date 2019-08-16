@@ -17,6 +17,7 @@
   "main": "background.js",
   "dependencies": {
     "core-js": "^2.6.5",
+    "downloadjs": "^1.4.7",
     "echarts": "^4.2.1",
     "element-ui": "^2.11.1",
     "v-charts": "^1.19.0",

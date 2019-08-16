@@ -116,7 +116,20 @@
           <div style="margin-bottom: 20px;">
             <span class="form-title">我的BMI历史记录：</span>
             <span style="float:right;">
-              <el-button type="text" @click="clearData" size="small">清空历史记录</el-button>
+              <el-button-group>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  icon="el-icon-download"
+                  @click="exportData"
+                >导出历史记录</el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  icon="el-icon-delete"
+                  @click="clearData"
+                >清空历史记录</el-button>
+              </el-button-group>
             </span>
             <div class="search-warpper">
               <label>开始日期：</label>
@@ -171,18 +184,8 @@
           <ve-line :data="chartData" :settings="chartSettings"></ve-line>
         </div>
       </el-main>
+      <el-footer>©2019 - BMI身体指数计算器桌面版 版权所有 © 柳叶刀</el-footer>
     </el-container>
-    <el-dialog title="bmi定义" :visible.sync="bmiDefDigVisible" width="60%">
-      <div>
-        <p>
-          身体质量指数（BMI，Body Mass Index）是国际上常用的衡量人体肥胖程度和是否健康的重要标准，主要用于统计分析。肥胖程度的判断不能采用体重的绝对值，它天然与身高有关。
-          因此，BMI 通过人体体重和身高两个数值获得相对客观的参数，并用这个参数所处范围衡量身体质量。
-        </p>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="bmiDefDigVisible = false">确定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -202,7 +205,6 @@ export default {
         weight: [{ required: true, message: "请输入体重", trigger: "blur" }]
       },
       tableData: [],
-      bmiDefDigVisible: false,
       total: 0,
       chartData: {
         columns: ["日期", "体重", "BMI"],
@@ -408,7 +410,23 @@ export default {
       this.$router.replace({ path: "/" });
     },
 
-    showBmiDefDig() {}
+    exportData() {
+      let bmi = localStorage.getItem("bmi");
+      let bmis = JSON.parse(bmi);
+      if (bmi && bmi != "[]") {
+      }
+      let contentString =
+        ["编号", "日期", "身高", "体重", "BMI"].join(",") + "\r\n";
+      bmis.forEach(item => {
+        let id = item.id;
+        let date = item.date;
+        let height = item.height + "cm";
+        let weight = item.weight + "kg";
+        let bmi = item.bmi;
+        contentString += `${id},${date},${height},${weight},${bmi}\r\n`;
+      });
+      this.utils.download(contentString, "BMI数据记录");
+    }
   },
   beforeDestroy() {
     this.$bus.off("get-bmi", () => {});
@@ -553,5 +571,14 @@ form {
 }
 .chart-wrapper {
   margin-top: 20px;
+}
+.el-footer {
+  height: 40px !important;
+  text-align: center;
+  font-size: 16px;
+  line-height: 40px;
+  color: white;
+  background: #5f87d8;
+  width: 100%;
 }
 </style>

@@ -1,4 +1,6 @@
 
+import download from "downloadjs";
+
 let utils = {
     getDatetime(date) {
         let d = date ? date : new Date();
@@ -54,6 +56,9 @@ let utils = {
         let time = year + '-' + month + '-' + day;
 
         return time;
-    }
+    },
+    download(dataString, name) {
+        download('\ufeff' + dataString, name + '-' + this.getDate() + '.csv', 'text/csv;charset=utf8;');
+    },
 };
 export default utils;
