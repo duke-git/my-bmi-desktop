@@ -189,7 +189,7 @@
     <el-dialog :visible.sync="dialogVisible" width="30%">
       <div class="dig-body">
         <img class="start-img" src="@/assets/start.gif" alt="scroll" />
-        <p>哈哈哈，胖媳妇又瘦了</p>
+        <p>哈哈哈，又瘦了</p>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
