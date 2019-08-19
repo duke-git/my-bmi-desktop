@@ -26,6 +26,7 @@ export default {
 </script>
 <style scoped lang="scss">
 .wrapper {
+  -webkit-app-region: no-drag;
   top: 0;
   position: fixed;
   right: 0;

@@ -186,6 +186,15 @@
       </el-main>
       <el-footer>©2019 - BMI身体指数计算器桌面版 版权所有 © 柳叶刀</el-footer>
     </el-container>
+    <el-dialog :visible.sync="dialogVisible" width="30%">
+      <div class="dig-body">
+        <img class="start-img" src="@/assets/start.gif" alt="scroll" />
+        <p>哈哈哈，胖媳妇又瘦了</p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -244,7 +253,8 @@ export default {
             }
           }
         ]
-      }
+      },
+      dialogVisible: false
     };
   },
   created() {
@@ -315,15 +325,24 @@ export default {
       }
     },
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          let bmiValue =
-            this.bmiForm.weight / Math.pow(this.bmiForm.height * 0.01, 2);
-          this.saveBMI(bmiValue);
-        } else {
-          return false;
-        }
-      });
+      let height = this.bmiForm.height;
+      let weight = this.bmiForm.weight;
+      if (height && weight && height > 0 && weight > 0) {
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            let bmiValue =
+              this.bmiForm.weight / Math.pow(this.bmiForm.height * 0.01, 2);
+            this.saveBMI(bmiValue);
+          } else {
+            return false;
+          }
+        });
+      } else {
+        this.$message({
+          message: "请输入身高和体重",
+          type: "warning"
+        });
+      }
     },
     saveBMI(bmi) {
       let item = {
@@ -351,10 +370,7 @@ export default {
         this.tableData.push(item);
       }
 
-      this.$message({
-        type: "success",
-        message: "添加成功!"
-      });
+      this.dialogVisible = true;
     },
     clearData() {
       this.$confirm(
@@ -440,6 +456,7 @@ export default {
 }
 
 .el-header {
+  -webkit-app-region: drag;
   height: 40px !important;
   text-align: center;
   font-size: 22px;
@@ -451,6 +468,7 @@ export default {
   z-index: 100;
   padding: 0 5px;
   .back-index {
+    -webkit-app-region: no-drag;
     float: left;
     cursor: pointer;
   }
@@ -580,5 +598,16 @@ form {
   color: white;
   background: #5f87d8;
   width: 100%;
+}
+.dig-body {
+  text-align: center;
+  font-size: 20px;
+  img {
+    width: 180px;
+    height: 180px;
+  }
+}
+.el-dialog__footer {
+  text-align: center !important;
 }
 </style>
