@@ -34,6 +34,7 @@ module.exports = {
                 "directories": {
                     "output": "./dist"//输出文件路径
                 },
+                "asar": false,
                 "win": {//win相关配置
                     "icon": "./public/app.ico",//图标，当前图标在根目录下，注意这里有两个坑
                     "target": [
