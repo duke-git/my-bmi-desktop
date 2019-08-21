@@ -5,11 +5,12 @@ import {
   createProtocol,
   installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
+
+import { autoUpdater } from "electron-updater"
+
 const debug = require('electron-debug');
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 let win
 let appTray = null
 let trayMenu = [
@@ -25,7 +26,6 @@ let trayMenu = [
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
 
 function createWindow() {
-  // Create the browser window.
   win = new BrowserWindow({
     height: 563,
     useContentSize: true,
@@ -81,16 +81,12 @@ ipcMain.on('window-close', function () {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
 
 app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
   if (win === null) {
     createWindow()
   }
@@ -131,4 +127,54 @@ if (isDevelopment) {
       app.quit()
     })
   }
+}
+
+// 检测更新，在你想要检查更新的时候执行，renderer事件触发后的操作自行编写
+function updateHandle() {
+  let message = {
+    error: '检查更新出错',
+    checking: '正在检查更新……',
+    updateAva: '检测到新版本，正在下载……',
+    updateNotAva: '现在使用的就是最新版本，不用更新',
+  };
+  const os = require('os');
+
+  autoUpdater.setFeedURL("http://pwkrg9wgk.bkt.clouddn.com/myBMI%E8%BA%AB%E4%BD%93%E6%8C%87%E6%95%B0%E8%AE%A1%E7%AE%97%E5%99%A8%20Setup%201.0.0.exe");
+  autoUpdater.on('error', function (error) {
+    sendUpdateMessage(message.error)
+  });
+  autoUpdater.on('checking-for-update', function () {
+    sendUpdateMessage(message.checking)
+  });
+  autoUpdater.on('update-available', function (info) {
+    sendUpdateMessage(message.updateAva)
+  });
+  autoUpdater.on('update-not-available', function (info) {
+    sendUpdateMessage(message.updateNotAva)
+  });
+
+  // 更新下载进度事件
+  autoUpdater.on('download-progress', function (progressObj) {
+    win.webContents.send('downloadProgress', progressObj)
+  })
+  autoUpdater.on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
+
+    ipcMain.on('isUpdateNow', (e, arg) => {
+      console.log(arguments);
+      console.log("开始更新");
+      autoUpdater.quitAndInstall();
+    });
+
+    win.webContents.send('isUpdateNow')
+  });
+
+  ipcMain.on("checkForUpdate", () => {
+    //执行自动更新检查
+    autoUpdater.checkForUpdates();
+  })
+}
+
+// 通过main进程发送事件给renderer进程，提示更新信息
+function sendUpdateMessage(text) {
+  win.webContents.send('message', text)
 }

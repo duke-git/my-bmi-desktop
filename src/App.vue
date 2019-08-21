@@ -6,13 +6,38 @@
 </template>
 <script>
 import Close from "@/components/Close.vue";
+let ipcRenderer = require("electron").ipcRenderer;
 
 export default {
   name: "app",
   components: {
     Close
   },
-  methods: {}
+  mounted() {
+    //检查自动更新
+    this.checkForUpdate();
+  },
+  methods: {
+    checkForUpdate() {
+      //检查自动更新
+      ipcRenderer.send("checkForUpdate");
+
+      ipcRenderer.on("message", (event, text) => {
+        console.log(arguments);
+        this.tips = text;
+      });
+      ipcRenderer.on("downloadProgress", (event, progressObj) => {
+        console.log(progressObj);
+        this.downloadPercent = progressObj.percent || 0;
+      });
+      ipcRenderer.on("isUpdateNow", () => {
+        ipcRenderer.send("isUpdateNow");
+      });
+    }
+  },
+  beforeDestroy() {
+    ipcRenderer.removeAll(["message", "downloadProgress", "isUpdateNow"]);
+  }
 };
 </script>
 <style lang="scss">

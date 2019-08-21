@@ -58,6 +58,12 @@ module.exports = {
                     "createStartMenuShortcut": true,// 创建开始菜单图标
                     "shortcutName": "myBMI", // 图标名称
                 },
+                "publish": [
+                    {
+                        "provider": "generic",
+                        "url": "http://**.**.**.**:3002/download/",//隐藏版本服务器地址
+                    }
+                ]
             }
 
         }
