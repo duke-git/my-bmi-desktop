@@ -1,6 +1,6 @@
 {
   "name": "my-bmi-desktop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "dudaodong@kingsoft.com",
   "description": "An electron-vue project",
   "license": "MIT",
@@ -9,7 +9,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build",
+    "electron:build:win": "vue-cli-service electron:build",
+    "electron:build:mac": "vue-cli-service electron:build --mac",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"

@@ -34,7 +34,25 @@ module.exports = {
                 "directories": {
                     "output": "./dist"//输出文件路径
                 },
-                "asar": false,
+                "asar": true,
+                "dmg": {
+                    "contents": [
+                        {
+                            "x": 410,
+                            "y": 150,
+                            "type": "link",
+                            "path": "/Applications"
+                        },
+                        {
+                            "x": 130,
+                            "y": 150,
+                            "type": "file"
+                        }
+                    ]
+                },
+                "mac": {
+                    "icon": "./public/app.icns",
+                },
                 "win": {//win相关配置
                     "icon": "./public/app.ico",//图标，当前图标在根目录下，注意这里有两个坑
                     "target": [
@@ -61,7 +79,7 @@ module.exports = {
                 "publish": [
                     {
                         "provider": "generic",
-                        "url": "http://**.**.**.**:3002/download/",//隐藏版本服务器地址
+                        "url": "http://**.**.**.**:3001/download/",//隐藏版本服务器地址
                     }
                 ]
             }
