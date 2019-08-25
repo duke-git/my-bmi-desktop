@@ -189,7 +189,8 @@
     <el-dialog :visible.sync="dialogVisible" width="30%">
       <div class="dig-body">
         <img class="start-img" src="@/assets/start.gif" alt="scroll" />
-        <p>哈哈哈，又瘦了</p>
+        <p>春小云，</p>
+        <p>你，又，瘦了！</p>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -284,7 +285,7 @@ export default {
       if (bmi && bmi != "[]") {
         let bmis = JSON.parse(bmi);
         bmis = bmis.filter(item => {
-          return item.id >= startDate && item.id <= endDate;
+          return item.date >= startDate && item.date <= endDate;
         });
         this.tableData = bmis;
         this.total = bmis.length;
@@ -309,7 +310,7 @@ export default {
       if (bmi) {
         let bmis = JSON.parse(bmi);
         bmis = bmis.filter(item => {
-          return item.id >= startDate && item.id <= endDate;
+          return item.date >= startDate && item.date <= endDate;
         });
         this.tableData = bmis;
         this.total = bmis.length;
@@ -345,9 +346,10 @@ export default {
       }
     },
     saveBMI(bmi) {
+      let d = new Date();
       let item = {
-        id: this.utils.getDate(),
-        date: this.utils.getDatetime(),
+        id: d.getTime(),
+        date: this.utils.getDate(),
         height: this.bmiForm.height,
         weight: this.bmiForm.weight,
         bmi: bmi.toFixed(1)
@@ -358,7 +360,7 @@ export default {
         if (bmis) {
           let data = JSON.parse(bmis);
           data = data.filter(bmi => {
-            return bmi.id != item.id;
+            return bmi.date != item.date;
           });
           data.push(item);
           localStorage.setItem("bmi", JSON.stringify(data));
@@ -412,14 +414,18 @@ export default {
       let bmi = localStorage.getItem("bmi");
       let bmis = JSON.parse(bmi);
       bmis = bmis.filter(item => {
-        return item.id != deletedItem.id;
+        return item.date != deletedItem.date;
       });
       localStorage.setItem("bmi", JSON.stringify(bmis));
+      let tableData = this.tableData.filter(item => {
+        return item.id != deletedItem.id;
+      });
+      this.tableData = tableData;
       this.$message({
         type: "success",
         message: "删除成功!"
       });
-      this.initData();
+      // this.initData();
       // this.$bus.emit("get-bmi");
     },
     backIndex() {
